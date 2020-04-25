@@ -1,2 +1,7 @@
 # scrambler
-Projekt na NiDUC
+Projekt z przedmiotu NiDUC
+
+Autorzy:
+Błażej Ułanowicz
+Dawid Dopart
+Maciej Franikowski
