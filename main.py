@@ -13,9 +13,25 @@ while(count < procentJedynek * 10):
     miejsceNaJedynke = random.randint(0, 999)
     if mainData[miejsceNaJedynke] == False:
         mainData[miejsceNaJedynke] = True
-        #mainData.reverse();
-        #mainData.set(True, [miejsceNaJedynke])
         count = count + 1
 
-
 print(mainData)
+
+# scrambling here
+
+count3 = 0
+counter = 0
+for num in range(1,999):
+    if mainData[num-1] != mainData[num]:
+        counter = 0
+    else:
+        counter = counter + 1
+    if counter == 2:
+        counter = -1
+        count3 = count3 + 1
+print(count3)
+
+
+
+
+
