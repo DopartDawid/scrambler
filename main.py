@@ -1,8 +1,10 @@
 from bitarray import bitarray
 import random
+from xor_scrambler import XORScramble
 
 BIT_ARRAY_LENGTH = 100
 PACKET_LENGTH = 100
+SCRAMBLE_KEY = bitarray('1110011011') # Key's length should be a divider of bitarray length.
 
 
 def initArray(array):
@@ -61,6 +63,22 @@ def main():
             print(currentIndex, " powtorzylo sie: ", statsArray[currentIndex])
         currentIndex += 1
 
+    print('\n\n\n\n') # SCRAMBLING HERE
+
+    XORScramble(mainData, SCRAMBLE_KEY)
+    print(mainData)
+    statsArray = []
+    for num in range(0, PACKET_LENGTH + 1):
+        statsArray.append(0)
+
+    getStats(mainData, statsArray)
+
+    # Showing stats (0 and 1 is not important)
+    currentIndex = 2
+    while(currentIndex < len(statsArray)):
+        if statsArray[currentIndex] != 0:
+            print(currentIndex, " powtorzylo sie: ", statsArray[currentIndex])
+        currentIndex += 1
 
 if __name__ == "__main__":
     main()
