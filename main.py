@@ -1,8 +1,9 @@
 from bitarray import bitarray
 import random
 from xor_scrambler import XORScramble
+from mul_scrambler import MULScramble, MULDescramble
 
-BIT_ARRAY_LENGTH = 100
+BIT_ARRAY_LENGTH = 100000
 PACKET_LENGTH = 100
 SCRAMBLE_KEY = bitarray('1110011011') # Key's length should be a divider of bitarray length.
 
@@ -44,6 +45,7 @@ def getStats(array, statsArray):
 
 
 def main():
+
     mainData = bitarray(BIT_ARRAY_LENGTH)
     initArray(mainData)
     # DEBUG
@@ -54,7 +56,10 @@ def main():
     for num in range(0, PACKET_LENGTH + 1):
         statsArray.append(0)
 
-    getStats(mainData, statsArray)
+    packetIndex = 0
+    while(packetIndex < mainData.length()):
+        getStats(mainData[packetIndex:packetIndex+PACKET_LENGTH-1], statsArray)
+        packetIndex += PACKET_LENGTH
 
     # Showing stats (0 and 1 is not important)
     currentIndex = 2
@@ -65,13 +70,16 @@ def main():
 
     print('\n\n\n\n') # SCRAMBLING HERE
 
-    XORScramble(mainData, SCRAMBLE_KEY)
+    MULScramble(mainData)
     print(mainData)
     statsArray = []
     for num in range(0, PACKET_LENGTH + 1):
         statsArray.append(0)
 
-    getStats(mainData, statsArray)
+    packetIndex = 0
+    while(packetIndex < mainData.length()):
+        getStats(mainData[packetIndex:packetIndex+PACKET_LENGTH-1], statsArray)
+        packetIndex += PACKET_LENGTH
 
     # Showing stats (0 and 1 is not important)
     currentIndex = 2
@@ -79,6 +87,7 @@ def main():
         if statsArray[currentIndex] != 0:
             print(currentIndex, " powtorzylo sie: ", statsArray[currentIndex])
         currentIndex += 1
+
 
 if __name__ == "__main__":
     main()
