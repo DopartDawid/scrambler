@@ -1,12 +1,11 @@
 from bitarray import bitarray
 import random
-from xor_scrambler import XORScramble
+from xor_scrambler import XORScramble, XORShiftKeyGenerator
 from mul_scrambler import MULScramble, MULDescramble
-from and_scrambler import ANDScramble
 
-BIT_ARRAY_LENGTH = 1000
+BIT_ARRAY_LENGTH = 100000
 PACKET_LENGTH = 8
-SCRAMBLE_KEY = bitarray('1110011011') # Key's length should be a divider of bitarray length.
+SCRAMBLE_SEED =0X27 # Key's length should be a divider of bitarray length.
 
 
 def initArray(array):
@@ -46,9 +45,8 @@ def getStats(array, statsArray):
 
     index = 2
     while(index < len(statsArray)):
-        statsArray[0] += statsArray[index] * 3**(index-3)
+        statsArray[0] += statsArray[index] * 2.5**(index-3)
         index += 1
-    print(statsArray[0])
 
 def main():
 
@@ -82,16 +80,16 @@ def main():
 
     # Showing stats (0 and 1 is not important)
     currentIndex = 2
-    while(currentIndex < len(statsArray)):
-        if statsArray[currentIndex] != 0:
-            print(currentIndex, " powtorzylo sie: ", statsArray[currentIndex])
+    while (currentIndex < len(mainStats)):
+        if mainStats[currentIndex] != 0:
+            print(currentIndex, " powtorzylo sie: ", mainStats[currentIndex])
         currentIndex += 1
-    print("Zepsute pakiety: ", mainStats[0]/(BIT_ARRAY_LENGTH/PACKET_LENGTH))
+    print("Zepsute pakiety: ", mainStats[0])
 
 
     print('\n\n\n\n') # SCRAMBLING HERE
 
-    MULScramble(mainData)
+    XORScramble(mainData,XORShiftKeyGenerator(SCRAMBLE_SEED))
     print(mainData)
 
     mainStats = []
@@ -118,11 +116,11 @@ def main():
 
     # Showing stats (0 and 1 is not important)
     currentIndex = 2
-    while(currentIndex < len(statsArray)):
-        if statsArray[currentIndex] != 0:
-            print(currentIndex, " powtorzylo sie: ", statsArray[currentIndex])
+    while(currentIndex < len(mainStats)):
+        if mainStats[currentIndex] != 0:
+            print(currentIndex, " powtorzylo sie: ", mainStats[currentIndex])
         currentIndex += 1
-    print("Zepsute pakiety: ", mainStats[0]/(BIT_ARRAY_LENGTH/PACKET_LENGTH))
+    print("Zepsute pakiety: ", mainStats[0])
 
 if __name__ == "__main__":
     main()
