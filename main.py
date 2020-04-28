@@ -2,9 +2,10 @@ from bitarray import bitarray
 import random
 from xor_scrambler import XORScramble
 from mul_scrambler import MULScramble, MULDescramble
+from and_scrambler import ANDScramble
 
-BIT_ARRAY_LENGTH = 100000
-PACKET_LENGTH = 100
+BIT_ARRAY_LENGTH = 1000
+PACKET_LENGTH = 8
 SCRAMBLE_KEY = bitarray('1110011011') # Key's length should be a divider of bitarray length.
 
 
@@ -43,6 +44,11 @@ def getStats(array, statsArray):
         currentIndex += 1
     statsArray[currentSeq] += 1     # Adding last sequence
 
+    index = 2
+    while(index < len(statsArray)):
+        statsArray[0] += statsArray[index] * 3**(index-3)
+        index += 1
+    print(statsArray[0])
 
 def main():
 
@@ -51,15 +57,28 @@ def main():
     # DEBUG
     print(mainData)
 
-    # Initializing array with stats
-    statsArray = []
-    for num in range(0, PACKET_LENGTH + 1):
-        statsArray.append(0)
 
+    mainStats = []
+    for num in range(0, PACKET_LENGTH + 1):
+        mainStats.append(0)
+    
+    # Getting stats
     packetIndex = 0
     while(packetIndex < mainData.length()):
+        statsArray = []
+        for num in range(0, PACKET_LENGTH + 1):
+            statsArray.append(0)
+
+
         getStats(mainData[packetIndex:packetIndex+PACKET_LENGTH-1], statsArray)
         packetIndex += PACKET_LENGTH
+        if statsArray[0] > random.uniform(0, 100):
+            mainStats[0] += 1
+
+        index = 2
+        while(index < len(statsArray)):
+            mainStats[index] += statsArray[index]
+            index += 1
 
     # Showing stats (0 and 1 is not important)
     currentIndex = 2
@@ -67,19 +86,35 @@ def main():
         if statsArray[currentIndex] != 0:
             print(currentIndex, " powtorzylo sie: ", statsArray[currentIndex])
         currentIndex += 1
+    print("Zepsute pakiety: ", mainStats[0]/(BIT_ARRAY_LENGTH/PACKET_LENGTH))
+
 
     print('\n\n\n\n') # SCRAMBLING HERE
 
     MULScramble(mainData)
     print(mainData)
-    statsArray = []
-    for num in range(0, PACKET_LENGTH + 1):
-        statsArray.append(0)
 
+    mainStats = []
+    for num in range(0, PACKET_LENGTH + 1):
+        mainStats.append(0)
+
+    # Getting stats
     packetIndex = 0
     while(packetIndex < mainData.length()):
+        statsArray = []
+        for num in range(0, PACKET_LENGTH + 1):
+            statsArray.append(0)
+
+
         getStats(mainData[packetIndex:packetIndex+PACKET_LENGTH-1], statsArray)
         packetIndex += PACKET_LENGTH
+        if statsArray[0] > random.uniform(0, 100):
+            mainStats[0] += 1
+
+        index = 2
+        while(index < len(statsArray)):
+            mainStats[index] += statsArray[index]
+            index += 1
 
     # Showing stats (0 and 1 is not important)
     currentIndex = 2
@@ -87,7 +122,7 @@ def main():
         if statsArray[currentIndex] != 0:
             print(currentIndex, " powtorzylo sie: ", statsArray[currentIndex])
         currentIndex += 1
-
+    print("Zepsute pakiety: ", mainStats[0]/(BIT_ARRAY_LENGTH/PACKET_LENGTH))
 
 if __name__ == "__main__":
     main()

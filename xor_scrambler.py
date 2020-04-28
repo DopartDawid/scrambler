@@ -1,6 +1,3 @@
-from bitarray import bitarray
-import random
-
 
 def XORScramble(array, scrambleKey):
     currentIndex = 0
