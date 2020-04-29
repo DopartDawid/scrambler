@@ -5,7 +5,7 @@ from mul_scrambler import MULScramble, MULDescramble
 
 BIT_ARRAY_LENGTH = 100000
 PACKET_LENGTH = 8
-SCRAMBLE_SEED =0X27 # Key's length should be a divider of bitarray length.
+SCRAMBLE_SEED = 0X27  # Key's length should be a divider of bitarray length.
 
 
 def initArray(array):
@@ -48,6 +48,7 @@ def getStats(array, statsArray):
         statsArray[0] += statsArray[index] * 2.5**(index-3)
         index += 1
 
+
 def main():
 
     mainData = bitarray(BIT_ARRAY_LENGTH)
@@ -55,18 +56,16 @@ def main():
     # DEBUG
     print(mainData)
 
-
     mainStats = []
     for num in range(0, PACKET_LENGTH + 1):
         mainStats.append(0)
-    
+
     # Getting stats
     packetIndex = 0
     while(packetIndex < mainData.length()):
         statsArray = []
         for num in range(0, PACKET_LENGTH + 1):
             statsArray.append(0)
-
 
         getStats(mainData[packetIndex:packetIndex+PACKET_LENGTH-1], statsArray)
         packetIndex += PACKET_LENGTH
@@ -86,10 +85,9 @@ def main():
         currentIndex += 1
     print("Zepsute pakiety: ", mainStats[0])
 
+    print('\n\n\n\n')   # SCRAMBLING HERE
 
-    print('\n\n\n\n') # SCRAMBLING HERE
-
-    XORScramble(mainData,XORShiftKeyGenerator(SCRAMBLE_SEED))
+    XORScramble(mainData, XORShiftKeyGenerator(SCRAMBLE_SEED))
     print(mainData)
 
     mainStats = []
@@ -102,7 +100,6 @@ def main():
         statsArray = []
         for num in range(0, PACKET_LENGTH + 1):
             statsArray.append(0)
-
 
         getStats(mainData[packetIndex:packetIndex+PACKET_LENGTH-1], statsArray)
         packetIndex += PACKET_LENGTH
@@ -121,6 +118,7 @@ def main():
             print(currentIndex, " powtorzylo sie: ", mainStats[currentIndex])
         currentIndex += 1
     print("Zepsute pakiety: ", mainStats[0])
+
 
 if __name__ == "__main__":
     main()

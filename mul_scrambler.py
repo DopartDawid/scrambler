@@ -4,11 +4,13 @@ from bitarray import bitarray
 POLYNOMIAL_INDEX1 = 5
 POLYNOMIAL_INDEX2 = 10
 
+
 def MULScramble(array):
     currentIndex = POLYNOMIAL_INDEX2
     while(currentIndex < array.length()):
         array[currentIndex] = array[currentIndex] ^ (array[currentIndex-POLYNOMIAL_INDEX1] ^ array[currentIndex-POLYNOMIAL_INDEX2])
         currentIndex += 1
+
 
 def MULDescramble(array):
     currentIndex = POLYNOMIAL_INDEX2
