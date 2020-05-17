@@ -8,13 +8,14 @@ from mul_scrambler import MULScramble, MULDescramble
 BIT_ARRAY_LENGTH = 100000
 PACKET_LENGTH = 8
 SCRAMBLE_SEED = 0X27  # Key's length should be a divider of bitarray length.
+PERCENTAGE_OF_ONES = int(sys.argv[2])
 
 
 def initArray(array):
     # Get a random number, between 0 and 100.
     # This number is the percentage of "1's" in out array.
-    percentageOfOnes = random.randint(0, 100)
-
+    #percentageOfOnes = random.randint(0, 100)
+    percentageOfOnes = PERCENTAGE_OF_ONES
     # DEBUG!!!!!!
     print("Procent: ", percentageOfOnes)
 
@@ -56,7 +57,7 @@ def main():
     mainData = bitarray(BIT_ARRAY_LENGTH)
     initArray(mainData)
     # DEBUG
-    print(mainData)
+    # print(mainData)
 
     mainStats = []
     for num in range(0, PACKET_LENGTH + 1):
@@ -90,7 +91,7 @@ def main():
     print('\n\n\n\n')   # SCRAMBLING HERE
 
     XORScramble(mainData, XORShiftKeyGenerator(SCRAMBLE_SEED))
-    print(mainData)
+    # print(mainData)
 
     mainStats = []
     for num in range(0, PACKET_LENGTH + 1):
