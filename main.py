@@ -1,5 +1,7 @@
 from bitarray import bitarray
 import random
+import csv
+import sys
 from xor_scrambler import XORScramble, XORShiftKeyGenerator
 from mul_scrambler import MULScramble, MULDescramble
 
@@ -106,7 +108,7 @@ def main():
         if statsArray[0] > random.uniform(0, 100):
             mainStats[0] += 1
 
-        index = 2
+        index = 1
         while(index < len(statsArray)):
             mainStats[index] += statsArray[index]
             index += 1
@@ -118,6 +120,10 @@ def main():
             print(currentIndex, " powtorzylo sie: ", mainStats[currentIndex])
         currentIndex += 1
     print("Zepsute pakiety: ", mainStats[0])
+
+    with open(sys.argv[1],'a', newline='') as outputfile:
+        writer = csv.writer(outputfile, delimiter = ',')
+        writer.writerow(mainStats)
 
 
 if __name__ == "__main__":
