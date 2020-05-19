@@ -26,5 +26,5 @@ def XORKeyGenerator(seed):
     generatedKey ^= generatedKey >> 3
     generatedKey ^= generatedKey << 2
     generatedKey ^= generatedKey >> 7
-    print(int2ba(generatedKey))
+    #print(int2ba(generatedKey))
     return int2ba(generatedKey)

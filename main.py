@@ -5,8 +5,8 @@ import sys
 from xor_scrambler import XORScramble, XORShiftKeyGenerator
 from mul_scrambler import MULScramble, MULDescramble
 
-BIT_ARRAY_LENGTH = 100000
 PACKET_LENGTH = 8
+BIT_ARRAY_LENGTH = int(sys.argv[3])*8
 SCRAMBLE_SEED = 0X27  # Key's length should be a divider of bitarray length.
 PERCENTAGE_OF_ONES = int(sys.argv[2])
 
@@ -17,7 +17,7 @@ def initArray(array):
     #percentageOfOnes = random.randint(0, 100)
     percentageOfOnes = PERCENTAGE_OF_ONES
     # DEBUG!!!!!!
-    print("Procent: ", percentageOfOnes)
+    #print("Procent: ", percentageOfOnes)
 
     # Initially we set our array to contain only "0's".
     array.setall(False)
@@ -79,7 +79,7 @@ def main():
         while(index < len(statsArray)):
             mainStats[index] += statsArray[index]
             index += 1
-
+    '''
     # Showing stats (0 and 1 is not important)
     currentIndex = 2
     while (currentIndex < len(mainStats)):
@@ -87,8 +87,9 @@ def main():
             print(currentIndex, " powtorzylo sie: ", mainStats[currentIndex])
         currentIndex += 1
     print("Zepsute pakiety: ", mainStats[0])
+    '''
 
-    print('\n\n\n\n')   # SCRAMBLING HERE
+    #print('\n\n\n\n')   # SCRAMBLING HERE
 
     XORScramble(mainData, XORShiftKeyGenerator(SCRAMBLE_SEED))
     # print(mainData)
@@ -113,7 +114,7 @@ def main():
         while(index < len(statsArray)):
             mainStats[index] += statsArray[index]
             index += 1
-
+    '''
     # Showing stats (0 and 1 is not important)
     currentIndex = 2
     while(currentIndex < len(mainStats)):
@@ -121,7 +122,7 @@ def main():
             print(currentIndex, " powtorzylo sie: ", mainStats[currentIndex])
         currentIndex += 1
     print("Zepsute pakiety: ", mainStats[0])
-
+    '''
     with open(sys.argv[1],'a', newline='') as outputfile:
         writer = csv.writer(outputfile, delimiter = ',')
         writer.writerow(mainStats)
