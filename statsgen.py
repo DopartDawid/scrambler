@@ -2,7 +2,7 @@ import csv
 import numpy as np
 import sys
 import matplotlib.pyplot as plt
-import math
+from scipy.optimize import curve_fit
 
 
 data_path = sys.argv[1]
@@ -17,8 +17,10 @@ broken_packets = data[:, 0]
 
 with open(stats_file, 'w') as resultFile:
     resultFile.write('Measurments: ' + headers[0] + '\nPercentage of ones: ' + headers[1] + '\nPackets sent: ' + headers[2])
-    resultFile.write('\nAverage packets broken: ' + str(np.mean(broken_packets)))
-    resultFile.write('\nStandard deviation: ' + str(np.std(broken_packets)))
+    average = np.mean(broken_packets)
+    resultFile.write('\nAverage packets broken: ' + str(average))
+    deviation = np.std(broken_packets)
+    resultFile.write('\nStandard deviation: ' + str(deviation))
     quartiles = np.percentile(broken_packets, [25, 50, 75])
     max_value = np.max(broken_packets)
     min_value = np.min(broken_packets)
@@ -35,9 +37,20 @@ axs[0].boxplot(broken_packets)
 
 ##GENERATE HIStOGRAM
 
-n_points = int(headers[0])
-n_bins = 1 + math.floor(3.3*math.log(n_points))
+def function_model(x, mean, amplitude, std_deviation):
+    return amplitude * np.exp( - ((x - mean) / std_deviation) ** 2)
 
-axs[1].set_title('Hisogram of broken packets')
-axs[1].hist(broken_packets, bins=n_bins)
+n_points = int(headers[0])
+n_bins = int(1 + np.floor(3.3*np.log(n_points)))
+
+
+n, bins, patches = axs[1].hist(broken_packets, bins=n_bins)
+bin_centers = bins[:-1] + np.diff(bins)/2
+params, _ = curve_fit(function_model, bin_centers, n, p0=[average, 0, deviation])
+print(str(average) + ' ' + str(deviation))
+print(params)
+x_interval_for_fit = np.linspace(bins[0], bins[-1], len(broken_packets))
+axs[1].plot(x_interval_for_fit, function_model(x_interval_for_fit, *params), '--')
+axs[1].set_title('Histogram of broken packets')
+
 plt.show()
