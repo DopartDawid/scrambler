@@ -4,6 +4,7 @@ import csv
 import sys
 from xor_scrambler import XORScramble, XORShiftKeyGenerator
 from mul_scrambler import MULScramble, MULDescramble
+from negationScrambler import negationScramble
 
 PACKET_LENGTH = 8
 BIT_ARRAY_LENGTH = int(sys.argv[3])*8
@@ -14,10 +15,9 @@ PERCENTAGE_OF_ONES = int(sys.argv[2])
 def initArray(array):
     # Get a random number, between 0 and 100.
     # This number is the percentage of "1's" in out array.
-    #percentageOfOnes = random.randint(0, 100)
+    # percentageOfOnes = random.randint(0, 100)
     percentageOfOnes = PERCENTAGE_OF_ONES
-    # DEBUG!!!!!!
-    #print("Procent: ", percentageOfOnes)
+    # print("Procent: ", percentageOfOnes)
 
     # Initially we set our array to contain only "0's".
     array.setall(False)
@@ -56,6 +56,14 @@ def main():
 
     mainData = bitarray(BIT_ARRAY_LENGTH)
     initArray(mainData)
+    mainDataMUL = mainData
+    mainDataNEGATE = mainData
+
+    with open('mainData_file', 'w', newline = '') as mainData_file:
+        writer = csv.writer(mainData_file, delimiter = ',')
+        writer.writerow(mainData)
+
+
     # DEBUG
     # print(mainData)
 
@@ -88,10 +96,16 @@ def main():
         currentIndex += 1
     print("Zepsute pakiety: ", mainStats[0])
     '''
+    with open(sys.argv[1] + '_BeforeScramble','a', newline='') as outputfile:
+        writer = csv.writer(outputfile, delimiter = ',')
+        writer.writerow(mainStats)
 
     #print('\n\n\n\n')   # SCRAMBLING HERE
 
     XORScramble(mainData, XORShiftKeyGenerator(SCRAMBLE_SEED))
+    MULScramble(mainDataMUL)
+    negationScramble(mainDataNEGATE)
+
     # print(mainData)
 
     mainStats = []
@@ -114,6 +128,62 @@ def main():
         while(index < len(statsArray)):
             mainStats[index] += statsArray[index]
             index += 1
+
+    with open(sys.argv[1] + "_XOR",'a', newline='') as outputfile:
+        writer = csv.writer(outputfile, delimiter = ',')
+        writer.writerow(mainStats)
+
+    # MAIN STATS FOR MUL SCRAMBLE
+    mainStats= []
+    for num in range(0, PACKET_LENGTH + 1):
+        mainStats.append(0)
+
+    # Getting stats
+    packetIndex = 0
+    while(packetIndex < mainDataMUL.length()):
+        statsArray = []
+        for num in range(0, PACKET_LENGTH + 1):
+            statsArray.append(0)
+
+        getStats(mainDataMUL[packetIndex:packetIndex+PACKET_LENGTH-1], statsArray)
+        packetIndex += PACKET_LENGTH
+        if statsArray[0] > random.uniform(0, 100):
+            mainStats[0] += 1
+
+        index = 1
+        while(index < len(statsArray)):
+            mainStats[index] += statsArray[index]
+            index += 1
+
+    with open(sys.argv[1] + "AND",'a', newline='') as outputfile:
+        writer = csv.writer(outputfile, delimiter = ',')
+        writer.writerow(mainStats)
+
+    # MAIN STATS FROM NEGATE SCRAMBLER
+    mainStats = []
+    for num in range(0, PACKET_LENGTH + 1):
+        mainStats.append(0)
+
+    # Getting stats
+    packetIndex = 0
+    while(packetIndex < mainDataNEGATE.length()):
+        statsArray = []
+        for num in range(0, PACKET_LENGTH + 1):
+            statsArray.append(0)
+
+        getStats(mainDataNEGATE[packetIndex:packetIndex+PACKET_LENGTH-1], statsArray)
+        packetIndex += PACKET_LENGTH
+        if statsArray[0] > random.uniform(0, 100):
+            mainStats[0] += 1
+
+        index = 1
+        while(index < len(statsArray)):
+            mainStats[index] += statsArray[index]
+            index += 1
+
+    with open(sys.argv[1] + "_NEGATE",'a', newline='') as outputfile:
+        writer = csv.writer(outputfile, delimiter = ',')
+        writer.writerow(mainStats)
     '''
     # Showing stats (0 and 1 is not important)
     currentIndex = 2
@@ -123,9 +193,12 @@ def main():
         currentIndex += 1
     print("Zepsute pakiety: ", mainStats[0])
     '''
-    with open(sys.argv[1],'a', newline='') as outputfile:
-        writer = csv.writer(outputfile, delimiter = ',')
-        writer.writerow(mainStats)
+
+
+
+
+
+
 
 
 if __name__ == "__main__":

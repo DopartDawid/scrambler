@@ -15,28 +15,17 @@ with open(data_path, 'r') as file:
 
 broken_packets = data[:, 0]
 
-with open(stats_file, 'w') as resultFile:
-    resultFile.write('Measurments: ' + headers[0] + '\nPercentage of ones: ' + headers[1] + '\nPackets sent: ' + headers[2])
-    average = np.mean(broken_packets)
-    resultFile.write('\nAverage packets broken: ' + str(average))
-    deviation = np.std(broken_packets)
-    resultFile.write('\nStandard deviation: ' + str(deviation))
-    quartiles = np.percentile(broken_packets, [25, 50, 75])
-    max_value = np.max(broken_packets)
-    min_value = np.min(broken_packets)
-    resultFile.write('\n\n\n\n\tFIVE-NUMBER SUMMARY\n')
-    resultFile.write('\tQ0 (minimum) = ' + str(min_value))
-    resultFile.write('\n\tQ1 = ' + str(quartiles[0]))
-    resultFile.write('\n\tQ2 = ' + str(quartiles[1]))
-    resultFile.write('\n\tQ3 = ' + str(quartiles[2]))
-    resultFile.write('\n\tQ4 (maximum) = ' + str(max_value))
-    
+average = np.mean(broken_packets)
+deviation = np.std(broken_packets)
+quartiles = np.percentile(broken_packets, [25, 50, 75])
+max_value = np.max(broken_packets)
+min_value = np.min(broken_packets)
+
 fig, axs = plt.subplots(1, 2, tight_layout=True)
 axs[0].set_title('Boxplot of broken packets')
 axs[0].boxplot(broken_packets)
 
-##GENERATE HIStOGRAM
-
+# GENERATE HIStOGRAM
 def function_model(x, mean, amplitude, std_deviation):
     return amplitude * np.exp( - ((x - mean) / std_deviation) ** 2)
 
@@ -54,3 +43,14 @@ axs[1].plot(x_interval_for_fit, function_model(x_interval_for_fit, *params), '--
 axs[1].set_title('Histogram of broken packets')
 
 plt.show()
+
+with open(stats_file, 'w') as resultFile:
+    resultFile.write('Measurments: ' + headers[0] + '\nPercentage of ones: ' + headers[1] + '\nPackets sent: ' + headers[2] + '\nPacket destroyed func: numberOfRepetitions * 2,5^(TypeOfRepetition -3)')
+    resultFile.write('\nAverage packets broken: ' + str(average))
+    resultFile.write('\nStandard deviation: ' + str(deviation))
+    resultFile.write('\n\n\n\n\tFIVE-NUMBER SUMMARY\n')
+    resultFile.write('\tQ0 (minimum) = ' + str(min_value))
+    resultFile.write('\n\tQ1 = ' + str(quartiles[0]))
+    resultFile.write('\n\tQ2 = ' + str(quartiles[1]))
+    resultFile.write('\n\tQ3 = ' + str(quartiles[2]))
+    resultFile.write('\n\tQ4 (maximum) = ' + str(max_value))
