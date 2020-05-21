@@ -56,8 +56,8 @@ def main():
 
     mainData = bitarray(BIT_ARRAY_LENGTH)
     initArray(mainData)
-    mainDataMUL = mainData
-    mainDataNEGATE = mainData
+    mainDataMUL = mainData.copy()
+    mainDataNEGATE = mainData.copy()
 
     with open('mainData_file', 'w', newline = '') as mainData_file:
         writer = csv.writer(mainData_file, delimiter = ',')
@@ -83,7 +83,7 @@ def main():
         if statsArray[0] > random.uniform(0, 100):
             mainStats[0] += 1
 
-        index = 2
+        index = 1
         while(index < len(statsArray)):
             mainStats[index] += statsArray[index]
             index += 1
@@ -155,7 +155,7 @@ def main():
             mainStats[index] += statsArray[index]
             index += 1
 
-    with open(sys.argv[1] + "AND",'a', newline='') as outputfile:
+    with open(sys.argv[1] + "_MUL",'a', newline='') as outputfile:
         writer = csv.writer(outputfile, delimiter = ',')
         writer.writerow(mainStats)
 
@@ -181,7 +181,7 @@ def main():
             mainStats[index] += statsArray[index]
             index += 1
 
-    with open(sys.argv[1] + "_NEGATE",'a', newline='') as outputfile:
+    with open(sys.argv[1] + "_NOT",'a', newline='') as outputfile:
         writer = csv.writer(outputfile, delimiter = ',')
         writer.writerow(mainStats)
     '''
