@@ -39,6 +39,8 @@ params, _ = curve_fit(function_model, bin_centers, n, p0=[average, 0, deviation]
 x_interval_for_fit = np.linspace(bins[0], bins[-1], len(broken_packets))
 axs[1].plot(x_interval_for_fit, function_model(x_interval_for_fit, *params), '--')
 axs[1].set_title('Histogram of broken packets')
+axs[1].set_ylabel('Repetitions')
+axs[1].set_xlabel('Packets lost')
 
 plt.savefig(sys.argv[2]+'.png')
 
